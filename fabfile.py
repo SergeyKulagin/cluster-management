@@ -26,5 +26,6 @@ def install_util():
 def stress():
     cmd("stress --cpu 4")
 
+@parallel
 def measure_temp():
     cmd("vcgencmd measure_temp")
