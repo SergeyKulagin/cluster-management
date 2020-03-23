@@ -6,11 +6,12 @@ Also the master node will be connected to a private network where the others nod
 * the worker nodes will be connected to a private network via eth0
 
 # process
-1. List wi-fi interfaces on the master node and get the wi-fi interface name:
+1. disable cloud init
+2. List wi-fi interfaces on the master node and get the wi-fi interface name:
 ```
 iwconfig
 ```
-2. On the newer versions of Linux netplan is used to configure the network.
+3. On the newer versions of Linux netplan is used to configure the network.
 Here the setup for master node:
 ```yaml
   network:
