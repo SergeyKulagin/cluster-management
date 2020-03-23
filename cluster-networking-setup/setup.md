@@ -39,12 +39,33 @@ Here ``192.168.100.33`` is a static ip address in the router's network.
 ``10.0.0.1`` is the ip address of the master in the private network.
 
 3. Set up the master node as a NAT server
-- enable ip forwarding
+- enable ip forwarding. For that change ``/etc/sysctl.conf``. Uncomment  ``net.ipv4.ip_forward=1``
 - set up ip tables
 ```
 iptables -t nat -A POSTROUTING -o wlan0 -j MASQUERADE
 iptables -A FORWARD -i wlan0 -o eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -i eth0 -o wlan0 -j ACCEPT
 ```
+There are few ways to modify iptables on system startup. In case of netplan use network up and down hooks:
+ - modify iptables as described above and save:
+ ``sudo sh -c "iptables-save > /etc/iptables.rules"``
+ - go to ``/etc/networkd-dispatcher/routable.d/`` and create/modify ``50-ifup-hooks`` file
+ ```
+#!/bin/sh
+
+for d in up pre-up; do
+    hookdir=/etc/network/if-${d}.d
+    [ -e $hookdir ] && /bin/run-parts $hookdir
+done
+exit 0
+```
+Add execute permissions to it ``sudo chmod +x 50-ifup-hooks``
+- Create hook script in ``/etc/network/if-pre-up.d/iptablesload`` (don't forget permission ``sudo chmod +x /etc/network/if-pre-up.d/iptablesload``):
+```
+!/bin/sh
+iptables-restore < /etc/iptables.rules
+exit 0
+```
+- reboot the node
 
 
