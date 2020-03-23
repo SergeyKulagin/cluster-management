@@ -1,0 +1,28 @@
+1.  set up a program to check wi-fi card
+sudo apt install rfkill
+2. check the status of the defices
+rfkill list
+unblock if needed:
+rfkill unblock wifi
+3. list wi-fi interfaces:
+iwconfig
+bring your interface up if needed:
+4.
+auto lo
+iface lo inet loopback
+
+auto wlan0
+iface wlan0 inet static
+address 192.168.100.20
+netmask 255.255.255.0
+gateway 192.168.100.1
+dns-nameservers 192.168.100.1
+wpa-ssid ZTE_2.4G_nqJTnR
+wpa-psk ZTEGC4D295A9
+
+
+5. for netplan
+/etc/cloud/cloud-init.disabled
+
+
+https://www.nairabytes.net/81-linux/418-how-to-set-up-a-nat-router-on-ubuntu-server-16-04
