@@ -1,3 +1,3 @@
-ssh-keygen -R 192.168.100.3
-ssh-keygen -R 192.168.100.4
-ssh-keygen -R 192.168.100.5
+ssh-keygen -R 192.168.100.33
+ssh-keygen -R 192.168.100.34
+ssh-keygen -R 192.168.100.35
