@@ -1,11 +1,11 @@
-# overview
+# Overview
 The cluster will be set up as following:
 * master node will be connected to the router with Internet access via Wi-fi (wlan0 interface name).
 The master node will have an ip address from the same subnet as the router.
 Also the master node will be connected to a private network where the others nodes will be connected via Ethernet (eth0 interface) 
 * the worker nodes will be connected to a private network via eth0
 
-# process
+# Set up nodes networking
 1. disable cloud init
 2. List wi-fi interfaces on the master node and get the wi-fi interface name:
 ```
@@ -69,4 +69,46 @@ exit 0
 ```
 - reboot the node
 
-
+# Set up Kubernetes cluster
+- [each node]: update node names, e.g.
+```commandline
+sudo hostnamectl set-hostname node-1
+```
+- [each node]: install docker
+```commandline
+sudo apt-get update
+sudo apt install docker.io
+sudo systemctl enable docker
+```
+- [each node]: add kubernetes repositories
+```commandline
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+sudo apt-add-repository 'deb http://apt.kubernetes.io/ kubernetes-xenial main
+sudo apt-get upgrade
+sudo apt-get update
+```
+- [each node]: install kubernetes tools
+```commandline
+sudo apt install kubeadm
+```
+- [master]: start master node and prepare config
+```commandline
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address 10.0.0.1 --apiserver-cert-extra-sans kubernetes.cluster.home
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
+- [master]: set up pods networking
+```commandline
+sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+```
+In case of raspberry pi you need to replace amd64 to arm64 in kube-flannel
+- [worker nodes]: join the master. Reset kubeadm if needed
+```commandline
+sudo kubeadm reset
+sudo kubeadm join 10.0.0.1:6443 --token rm6t4d.7ea2klzguui7a2nh --discovery-token-ca-cert-hash sha256:ce5ddbb705d5a4154dd4c7fccd195bd0b933c4f3cc792985e61403ea0db2854b
+```
+- [master]: check cluster status
+```commandline
+kubectl get nodes
+```
