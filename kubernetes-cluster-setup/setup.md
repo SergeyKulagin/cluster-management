@@ -93,7 +93,7 @@ sudo apt install kubeadm
 ```
 - [master]: start master node and prepare config
 ```commandline
-sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address 10.0.0.1 --apiserver-cert-extra-sans kubernetes.cluster.home
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address 10.0.0.1 --apiserver-cert-extra-sans 192.168.100.33
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
@@ -112,3 +112,14 @@ sudo kubeadm join 10.0.0.1:6443 --token rm6t4d.7ea2klzguui7a2nh --discovery-toke
 ```commandline
 kubectl get nodes
 ```
+# additional set up
+If you forgot to add some host to the api server certificates you can do the following:
+```
+kubectl -n kube-system get configmap kubeadm-config -o jsonpath='{.data.ClusterConfiguration}' > kubeadm.yaml
+```
+Update the ips in the config, regenerate certificates based on it and update the config in the ConfigMaps
+```commandline
+sudo kubeadm init phase certs apiserver --config kubeadm.yaml
+kubeadm config upload from-file --config kubeadm.yaml
+```
+After that you need - todo
