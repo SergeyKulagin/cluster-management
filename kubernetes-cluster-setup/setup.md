@@ -122,4 +122,9 @@ Update the ips in the config, regenerate certificates based on it and update the
 sudo kubeadm init phase certs apiserver --config kubeadm.yaml
 kubeadm config upload from-file --config kubeadm.yaml
 ```
-After that you need - todo
+After that you need restart api server
+```commandline
+docker ps | grep kube-apiserver | grep -v pause
+docker kill <containerID>
+
+```
