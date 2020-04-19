@@ -108,6 +108,7 @@ In case of raspberry pi you need to replace amd64 to arm64 in kube-flannel
 sudo kubeadm reset
 sudo kubeadm join 10.0.0.1:6443 --token rm6t4d.7ea2klzguui7a2nh --discovery-token-ca-cert-hash sha256:ce5ddbb705d5a4154dd4c7fccd195bd0b933c4f3cc792985e61403ea0db2854b
 ```
+(obtain join command on the master node if needed: ``sudo kubeadm token create --print-join-command``)
 - [master]: check cluster status
 ```commandline
 kubectl get nodes

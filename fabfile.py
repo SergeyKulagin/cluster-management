@@ -3,8 +3,8 @@ import config as cfg
 
 master_host = ['ubuntu@192.168.100.33']
 nodes = [
-    'ubuntu@192.168.100.34',
-    'ubuntu@192.168.100.35'
+    'ubuntu@192.168.100.36',
+    'ubuntu@192.168.100.37'
 ]
 all_hosts = master_host + nodes
 
@@ -18,7 +18,7 @@ def cmd(command):
 
 @parallel
 def pi_ppa():
-    cmd("add-apt-repository ppa:ubuntu-raspi2/ppa")
+    cmd("yes | add-apt-repository ppa:ubuntu-raspi2/ppa")
     cmd("apt-get update")
 
 
@@ -35,6 +35,16 @@ def stress():
 @parallel
 def measure_temp():
     cmd("vcgencmd measure_temp")
+
+
+@parallel
+@hosts(nodes)
+def make_k8s_node():
+    pi_ppa()
+    install_util()
+    kubernetes_package_prepare()
+    docker()
+    kubernetes_tools()
 
 
 @parallel
