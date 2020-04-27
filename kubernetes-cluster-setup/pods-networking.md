@@ -10,9 +10,8 @@ To inspect what's going on inside the pods's isolated namespace the following ca
 1) input: ```docker inspect --format '{{ .State.Pid }}' <container-id-or-name>```  to find the PID of the pod  
 output: ``<pid_id>``
 2)  ```nsenter -t <pid_id> -n ip addr``` - to execute a command inside the pod network  
-
 one command for short:
-```sudo nsenter -t $(sudo docker inspect --format '{{ .State.Pid }}' <container-id-or-name>) -n ip addr```
+`sudo nsenter -t $(sudo docker inspect --format '{{ .State.Pid }}' <container-id-or-name>) -n ip addr`
 ---
 
 Kubernetes requires all pods (no matter which node) to be like they connected to the same internet switch.
