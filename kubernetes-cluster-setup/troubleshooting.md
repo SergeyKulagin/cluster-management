@@ -14,3 +14,21 @@ Conditions:
 If you have some problem it's likely you can see it here and reason of it in Reason columns.
 
 - for the further investigations you can ssh to the node check the it from inside.
+
+### Cluster networking
+```journalctl -u kubelet -S "2020-04-25 00:00:00" | grep kube-proxy``` to analyze logs of the kube-proxy
+
+### Others (todo)
+
+find docker container pid
+```
+docker inspect --format '{{ .State.Pid }}' container-id-or-name
+
+```
+```nsenter -t ${PID} -n ip addr```
+
+
+```sudo iptables -t nat -nL```
+
+
+```kubectl exec -ti dnsutils -- nslookup kubernetes.default```

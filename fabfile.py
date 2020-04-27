@@ -23,6 +23,11 @@ def pi_ppa():
 
 
 @parallel
+def reboot():
+    sudo("reboot now")
+
+
+@parallel
 def install_util():
     cmd("apt-get install stress")
 
