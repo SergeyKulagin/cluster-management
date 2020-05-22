@@ -3,6 +3,8 @@ import config as cfg
 
 master_host = ['ubuntu@192.168.100.33']
 nodes = [
+    'ubuntu@192.168.100.34',
+    'ubuntu@192.168.100.35'
     'ubuntu@192.168.100.36',
     'ubuntu@192.168.100.37'
 ]
@@ -21,6 +23,9 @@ def pi_ppa():
     cmd("yes | add-apt-repository ppa:ubuntu-raspi2/ppa")
     cmd("apt-get update")
 
+@parallel
+def nfs():
+    sudo("yes | apt-get install nfs-common")
 
 @parallel
 def reboot():
@@ -50,6 +55,7 @@ def make_k8s_node():
     kubernetes_package_prepare()
     docker()
     kubernetes_tools()
+    nfs()
 
 
 @parallel
