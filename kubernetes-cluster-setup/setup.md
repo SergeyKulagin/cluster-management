@@ -93,6 +93,7 @@ sudo apt install kubeadm
 ```
 - [master]: start master node and prepare config
 ```commandline
+sudo kubeadm reset
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address 10.0.0.1 --apiserver-cert-extra-sans 192.168.100.33
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
