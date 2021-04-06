@@ -32,3 +32,15 @@ docker inspect --format '{{ .State.Pid }}' container-id-or-name
 
 
 ```kubectl exec -ti dnsutils -- nslookup kubernetes.default```
+
+### Master certificate expiration
+```
+cd /etc/kubernetes/pki/
+mv {apiserver.crt,apiserver-etcd-client.key,apiserver-kubelet-client.crt,front-proxy-ca.crt,front-proxy-client.crt,front-proxy-client.key,front-proxy-ca.key,apiserver-kubelet-client.key,apiserver.key,apiserver-etcd-client.crt} ~/
+kubeadm init phase certs all --apiserver-advertise-address <IP>
+cd /etc/kubernetes/
+mv {admin.conf,controller-manager.conf,kubelet.conf,scheduler.conf} ~/
+kubeadm init phase kubeconfig all
+reboot
+```
+and copy new admin config
